@@ -16,7 +16,8 @@ class FeedbackScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('Submit Feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              const Text('Submit Feedback',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
               const SizedBox(height: 16),
               const CustomTextField(hintText: 'Subject', icon: Iconsax.message),
               const SizedBox(height: 16),
@@ -38,7 +39,8 @@ class FeedbackScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 24),
-              const Text('Contact Support', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+              const Text('Contact Support',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
               const SizedBox(height: 16),
               ListTile(
                 leading: const Icon(Iconsax.call, color: Color(0xFF2E7D32)),
@@ -49,7 +51,7 @@ class FeedbackScreen extends StatelessWidget {
               ListTile(
                 leading: const Icon(Iconsax.sms, color: Color(0xFF2E7D32)),
                 title: const Text('Email'),
-                subtitle: const Text('support@pyrepower.ng'),
+                subtitle: const Text('support@Pyre-EcoMint.ng'),
                 onTap: () {},
               ),
             ],

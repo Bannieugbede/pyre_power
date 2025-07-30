@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "pyre_power" "\0"
+            VALUE "FileDescription", "pyre_eco_mint" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "pyre_power" "\0"
+            VALUE "InternalName", "pyre_eco_mint" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "pyre_power.exe" "\0"
-            VALUE "ProductName", "pyre_power" "\0"
+            VALUE "OriginalFilename", "pyre_eco_mint.exe" "\0"
+            VALUE "ProductName", "pyre_eco_mint" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

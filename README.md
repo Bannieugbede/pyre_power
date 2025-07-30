@@ -1,4 +1,4 @@
-# pyre_power
+# pyre_eco_mint
 
 A new Flutter project.
 

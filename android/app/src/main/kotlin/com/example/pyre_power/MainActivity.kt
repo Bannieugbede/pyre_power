@@ -1,4 +1,4 @@
-package com.example.pyre_power
+package com.example.pyre_eco_mint
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,4 +1,4 @@
-name: pyre_power
+name: pyre_eco_mint
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -40,6 +40,9 @@ dependencies:
   latlong2: ^0.9.1
   font_awesome_flutter: ^10.7.0
   iconsax: ^0.0.8
+  image_picker: ^1.1.2
+  tflite_flutter: ^0.10.4
+  permission_handler: ^11.1.0
 
 dev_dependencies:
   flutter_test:

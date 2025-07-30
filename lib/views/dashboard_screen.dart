@@ -9,11 +9,11 @@ import 'schedule_pickup_screen.dart';
 import 'feedback_screen.dart';
 import 'guidelines_screen.dart';
 import 'education_screen.dart';
-import 'recycling_points_screen.dart';
 import 'rewards_screen.dart';
 import 'shop_screen.dart';
 import 'pickup_tracking_screen.dart';
-import 'waste_management_hub_screen.dart';
+import 'subscription_screen.dart';
+import 'trash_classification_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -27,8 +27,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   final List<Widget> _screens = [
     const HomeContent(),
-    const WasteManagementHubScreen(),
     const SchedulePickupScreen(),
+    ShopScreen(),
+    // const WalletScreen(),
     const ProfileScreen(),
   ];
 
@@ -44,17 +45,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pyre Power'),
-        centerTitle: true,
+        title: const Text('Pyre-EcoMint'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.user, color: Color(0xFF2E7D32)),
+            icon: const Icon(Iconsax.notification, color: Color(0xFF2E7D32)),
+            // icon: const Icon(Iconsax.user, color: Color(0xFF2E7D32)),
             onPressed: () {
-              setState(() {
-                _selectedIndex = 3; // Switch to Profile tab
-              });
+              // setState(() {
+              //   _selectedIndex = 3; // Switch to Profile tab
+              // });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationsScreen()),
+              );
             },
           ),
         ],
@@ -64,29 +69,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary),
+              decoration:
+                  BoxDecoration(color: Theme.of(context).colorScheme.primary),
               child: const Text(
-                'Pyre Power Menu',
+                'Pyre-EcoMint Menu',
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
             ),
             ListTile(
-              leading: const Icon(Iconsax.wallet, color: Color(0xFF2E7D32)),
-              title: const Text('Wallet'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WalletScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Iconsax.notification, color: Color(0xFF2E7D32)),
+              leading:
+                  const Icon(Iconsax.notification, color: Color(0xFF2E7D32)),
               title: const Text('Notifications'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationsScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => NotificationsScreen()),
                 );
               },
             ),
@@ -107,16 +105,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EducationScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Iconsax.location, color: Color(0xFF2E7D32)),
-              title: const Text('Recycling Points'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RecyclingPointsScreen()),
                 );
               },
             ),
@@ -146,17 +134,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PickupTrackingScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => PickupTrackingScreen()),
                 );
               },
             ),
             ListTile(
-              leading: const Icon(Iconsax.message, color: Color(0xFF2E7D32)),
-              title: const Text('Feedback & Support'),
+              leading: const Icon(Iconsax.scanner, color: Color(0xFF2E7D32)),
+              title: const Text('Trash Classifier'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FeedbackScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const TrashClassificationScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Iconsax.ticket, color: Color(0xFF2E7D32)),
+              title: const Text('Subscription'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SubscriptionScreen()),
                 );
               },
             ),
@@ -179,13 +180,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Iconsax.link),
-            label: 'Waste Hub',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Iconsax.truck),
             label: 'Pickup',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Iconsax.shop),
+            label: 'Shop',
+          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Iconsax.wallet),
+          //   label: 'Wallet',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Iconsax.user),
             label: 'Profile',
@@ -224,19 +229,27 @@ class HomeContent extends StatelessWidget {
             const SizedBox(height: 16),
             Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    Text('Your Impact', style: Theme.of(context).textTheme.headlineMedium),
+                    Text('Your Impact',
+                        style: Theme.of(context).textTheme.headlineMedium),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildStatCard(context, 'Waste Recycled', '50 kg', Iconsax.receive_square),
-                        _buildStatCard(context, 'Points Earned', '${userProvider.ecoPoints}', Iconsax.star),
-                        _buildStatCard(context, 'Wallet Bal', '₦5,250', Iconsax.wallet),
+                        _buildStatCard(context, 'Waste Recycled', '50 kg',
+                            Iconsax.receive_square),
+                        _buildStatCard(context, 'Points Earned',
+                            '${userProvider.ecoPoints}', Iconsax.star),
+                        _buildStatCard(
+                            context,
+                            'Wallet Balance',
+                            '₦${userProvider.walletBalance.toStringAsFixed(2)}',
+                            Iconsax.wallet),
                       ],
                     ),
                   ],
@@ -244,7 +257,8 @@ class HomeContent extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            Text('Quick Actions', style: Theme.of(context).textTheme.headlineMedium),
+            Text('Quick Actions',
+                style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 16),
             GridView.count(
               crossAxisCount: 2,
@@ -259,21 +273,24 @@ class HomeContent extends StatelessWidget {
                   title: 'Schedule Pickup',
                   icon: Iconsax.truck,
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SchedulePickupScreen()),
-                    );
-                  },
-                ),
-                _buildQuickActionCard(
-                  context,
-                  title: 'Find Recycling',
-                  icon: Iconsax.location,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const RecyclingPointsScreen()),
-                    );
+                    if (userProvider.isSubscribed) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SchedulePickupScreen()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('Please subscribe to schedule a pickup')),
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SubscriptionScreen()),
+                      );
+                    }
                   },
                 ),
                 _buildQuickActionCard(
@@ -283,18 +300,21 @@ class HomeContent extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => WalletScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const WalletScreen()),
                     );
                   },
                 ),
                 _buildQuickActionCard(
                   context,
-                  title: 'Waste Hub',
-                  icon: Iconsax.link,
+                  title: 'Classify Trash',
+                  icon: Iconsax.scanner,
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const WasteManagementHubScreen()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const TrashClassificationScreen()),
                     );
                   },
                 ),
@@ -306,18 +326,30 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(BuildContext context, String title, String value, IconData icon) {
+  Widget _buildStatCard(
+      BuildContext context, String title, String value, IconData icon) {
     return Column(
       children: [
         Icon(icon, color: Theme.of(context).colorScheme.primary, size: 40),
         const SizedBox(height: 8),
-        Text(value, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
-        Text(title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey)),
+        Text(value,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(fontWeight: FontWeight.bold)),
+        Text(title,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Colors.grey)),
       ],
     );
   }
 
-  Widget _buildQuickActionCard(BuildContext context, {required String title, required IconData icon, required VoidCallback onTap}) {
+  Widget _buildQuickActionCard(BuildContext context,
+      {required String title,
+      required IconData icon,
+      required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -347,9 +379,9 @@ class HomeContent extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF2E7D32),
-                  ),
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF2E7D32),
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ],

@@ -8,8 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:pyre_power/main.dart';
-import 'package:pyre_power/views/login_screen.dart';
+import 'package:pyre_eco_mint/main.dart';
+import 'package:pyre_eco_mint/views/login_screen.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

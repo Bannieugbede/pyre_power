@@ -1,152 +1,148 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../models/transaction_model.dart';
-import '../widget_files/custom_button.dart';
-import '../widget_files/custom_text_field.dart';
+import 'package:provider/provider.dart';
+import '../controllers/user_provider.dart';
+import 'subscription_screen.dart';
 
 class WalletScreen extends StatelessWidget {
-  WalletScreen({super.key});
-
-  final List<Transaction> transactions = [
-    Transaction(id: '1', type: 'pickup', amount: 2500.0, date: '2025-07-20'),
-    Transaction(id: '2', type: 'withdrawal', amount: -5000.0, date: '2025-07-15'),
-    Transaction(id: '3', type: 'bill_payment', amount: -3500.0, date: '2025-07-10'),
-  ];
-
-  final List<String> banks = [
-    'GTBank',
-    'Zenith Bank',
-    'First Bank',
-    'Access Bank',
-    'UBA',
-  ];
-
-  final List<String> utilities = [
-    'PHCN (Electricity)',
-    'DSTV',
-    'GOtv',
-    'Lagos Water Corporation',
-    'MTN Airtime',
-  ];
+  const WalletScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Wallet')),
+      appBar: AppBar(
+        title: const Text('Wallet'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Digital Wallet', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-              const SizedBox(height: 16),
+              Text(
+                'Wallet Balance',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 8),
               Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Balance', style: TextStyle(fontSize: 18)),
-                      Text('₦5,250', style: TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.primary)),
+                      Text(
+                        '₦${userProvider.walletBalance.toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: const Color(0xFF2E7D32),
+                        ),
+                      ),
+                      const Icon(Iconsax.wallet, size: 40, color: Color(0xFF2E7D32)),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              const Text('Transaction History', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: transactions.length,
-                itemBuilder: (context, index) {
-                  final transaction = transactions[index];
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      leading: Icon(
-                        transaction.type == 'pickup'
-                            ? Iconsax.receive_square
-                            : transaction.type == 'withdrawal'
-                            ? Iconsax.money_send
-                            : Iconsax.receipt,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      title: Text('${transaction.type.replaceAll('_', ' ').capitalize()} - ${transaction.date}'),
-                      trailing: Text(
-                        '${transaction.amount > 0 ? '+' : ''}₦${transaction.amount.toStringAsFixed(2)}',
-                        style: TextStyle(color: transaction.amount > 0 ? Colors.green : Colors.red),
-                      ),
-                    ),
-                  );
-                },
+              const SizedBox(height: 24),
+              Text(
+                'Fund Wallet',
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 16),
-              const Text('Withdraw Cash', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              const CustomTextField(hintText: 'Amount (₦)', icon: Iconsax.money),
+              _buildFundingOption(
+                context,
+                title: 'Debit Card',
+                icon: Iconsax.card,
+                onTap: () => _fundWallet(context, userProvider, 'Debit Card'),
+              ),
+              const SizedBox(height: 8),
+              _buildFundingOption(
+                context,
+                title: 'Bank Transfer',
+                icon: Iconsax.bank,
+                onTap: () => _fundWallet(context, userProvider, 'Bank Transfer'),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Redeem Points (${userProvider.ecoPoints} points)',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Bank',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Iconsax.bank),
+              _buildFundingOption(
+                context,
+                title: 'Data (1GB, 50 points)',
+                icon: Iconsax.mobile,
+                onTap: () => _redeemPoints(context, userProvider, '1GB Data', 50),
+              ),
+              const SizedBox(height: 8),
+              _buildFundingOption(
+                context,
+                title: 'Airtime (₦500, 30 points)',
+                icon: Iconsax.call,
+                onTap: () => _redeemPoints(context, userProvider, '₦500 Airtime', 30),
+              ),
+              const SizedBox(height: 8),
+              _buildFundingOption(
+                context,
+                title: 'Utility Bill (₦1,000, 60 points)',
+                icon: Iconsax.electricity,
+                onTap: () => _redeemPoints(context, userProvider, '₦1,000 Utility Bill', 60),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Subscription Status',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 8),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                child: ListTile(
+                  title: Text(userProvider.subscriptionPlan == 'None'
+                      ? 'No Active Subscription'
+                      : '${userProvider.subscriptionPlan} Plan'),
+                  subtitle: Text(userProvider.subscriptionPlan == 'None'
+                      ? 'Subscribe to access premium features'
+                      : 'Expires: ${userProvider.subscriptionExpiry?.toString().split(' ')[0] ?? ''}'),
+                  trailing: const Icon(Iconsax.ticket, color: Color(0xFF2E7D32)),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SubscriptionScreen()),
+                    );
+                  },
                 ),
-                items: banks.map((String bank) {
-                  return DropdownMenuItem<String>(
-                    value: bank,
-                    child: Text(bank),
-                  );
-                }).toList(),
-                onChanged: (value) {},
               ),
-              const SizedBox(height: 16),
-              const CustomTextField(hintText: 'Account Number', icon: Iconsax.card),
-              const SizedBox(height: 16),
-              CustomButton(
-                text: 'Withdraw',
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Withdrawal Requested!')),
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-              const Text('Pay Bills', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Utility',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Iconsax.receipt),
-                ),
-                items: utilities.map((String utility) {
-                  return DropdownMenuItem<String>(
-                    value: utility,
-                    child: Text(utility),
-                  );
-                }).toList(),
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 16),
-              const CustomTextField(hintText: 'Bill Amount (₦)', icon: Iconsax.money),
-              const SizedBox(height: 16),
-              const CustomTextField(hintText: 'Account/Meter Number', icon: Iconsax.card),
-              const SizedBox(height: 16),
-              CustomButton(
-                text: 'Pay Bill',
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Bill Payment Processed!')),
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-              const Text('Payment Methods', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              ListTile(
-                leading: const Icon(Iconsax.card, color: Color(0xFF2E7D32)),
-                title: const Text('GTBank **** 1234'),
-                trailing: IconButton(
-                  icon: const Icon(Iconsax.trash),
-                  onPressed: () {},
+            ],
+          ),
+        ),
+      )
+
+    );
+  }
+
+  Widget _buildFundingOption(BuildContext context, {required String title, required IconData icon, required VoidCallback onTap}) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Icon(icon, size: 30, color: const Color(0xFF2E7D32)),
+              const SizedBox(width: 16),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF2E7D32),
                 ),
               ),
             ],
@@ -155,10 +151,48 @@ class WalletScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  void _fundWallet(BuildContext context, UserProvider userProvider, String method) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Fund Wallet with $method'),
+        content: const Text('Enter amount (₦):'),
+        actions: [
+          TextField(
+            keyboardType: TextInputType.number,
+            onSubmitted: (value) {
+              final amount = double.tryParse(value) ?? 0.0;
+              if (amount > 0) {
+                userProvider.fundWallet(amount);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('₦$amount added via $method')),
+                );
+              }
+            },
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'e.g., 1000',
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _redeemPoints(BuildContext context, UserProvider userProvider, String item, int points) {
+    final success = userProvider.redeemPoints(item, points);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(success
+            ? '$item redeemed successfully'
+            : 'Insufficient points for $item'),
+      ),
+    );
   }
 }
