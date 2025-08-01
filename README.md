@@ -42,6 +42,8 @@ Pyre-Eco-Mint is a cross-platform application that allows individuals, businesse
 The React-based web app is hosted separately. Instructions and repository will be provided in the future update.
 
 # 📂 Folder Structure
+
+```
 lib/
 ├── models/
 ├── providers/
@@ -49,6 +51,7 @@ lib/
 ├── widgets/
 ├── services/
 └── main.dart
+```
 
 ### 🏆 Achievements
 - ✅ 3rd Runner-Up – PH Tech Expo 2025.
