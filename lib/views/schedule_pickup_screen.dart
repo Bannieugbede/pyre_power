@@ -9,7 +9,7 @@ class SchedulePickupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Schedule Pickup')),
+      // appBar: AppBar(title: const Text('Schedule Pickup')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),

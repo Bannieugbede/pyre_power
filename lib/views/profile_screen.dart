@@ -9,11 +9,11 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Profile'),
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),

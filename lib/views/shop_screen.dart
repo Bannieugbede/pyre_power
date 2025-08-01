@@ -14,7 +14,7 @@ class ShopScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Eco Shop')),
+      // appBar: AppBar(title: const Text('Eco Shop')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
